@@ -36,7 +36,7 @@ export class FileService {
   logger: ILogger;
   @Inject()
   httpClient: HttpClient;
-  private BASE_STRM_URL = 'http://xxxxxx:7001/d/';
+  private BASE_STRM_URL = 'http://xxxx:7001/d';
   public WhiteDirs = [
     '来自：BT磁力链下载',
     '来自：百度网盘',
@@ -260,24 +260,19 @@ export class FileService {
             this.downloadFile(fileId, job.token, childCnNamepath);
           } else if (this.MEDIA_DATA_EXT.includes(extName)) {
             const strmPath = filePath.replace(extName, '.strm');
+            const id = fileId;
+            const filename = item.filename;
+            const dirName = dirname(strmPath);
+            const url = `${this.BASE_STRM_URL}?id=${id}&fileName=${filename}`;
+            // const encodedUrl = encodeURIComponent(url);
             if (existsSync(strmPath)) {
+              // writeFileSync(strmPath, encodedUrl);
               continue;
             } else {
-              const id = encodeURIComponent(fileId);
-              const filename = encodeURIComponent(item.filename);
-              const dirName = dirname(strmPath);
               mkdirSync(dirName, { recursive: true });
-              writeFileSync(
-                strmPath,
-                `${this.BASE_STRM_URL}${id}/${filename}`,
-                {
-                  encoding: 'utf8',
-                }
-              );
+              writeFileSync(strmPath, url);
             }
-            this.logger.warn(
-              `创建文件成功: ${fileId}, cnName: ${childCnNamepath}, filePath: ${strmPath}`
-            );
+            this.logger.warn(`创建文件成功: filePath: ${strmPath}`);
           }
           // 文件类型
         }
@@ -371,7 +366,7 @@ export class FileService {
           await new Promise(r => setTimeout(r, RETRY_DELAY));
           this.logger.warn(`准备进行第${attempt + 1}次重试...`);
         } else {
-           this.logger.warn(`下载最终失败！`);
+          this.logger.warn('下载最终失败！');
         }
       }
     }

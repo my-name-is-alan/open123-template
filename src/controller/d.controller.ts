@@ -1,4 +1,4 @@
-import { Inject, Controller, Get, Param, HttpCode } from '@midwayjs/core';
+import { Inject, Controller, Get, HttpCode, Query } from '@midwayjs/core';
 import { UserService } from '../service/user.service';
 import { TokenService } from '../service/token.service';
 import { User } from '../entity/user';
@@ -22,9 +22,12 @@ export class APIController {
   fileService: FileService;
   @Inject()
   ctx: Context;
-  @Get('/:id/:fileName')
+  @Get()
   @HttpCode(302)
-  async getFileList(@Param('id') id: string) {
+  async getFileList(
+    @Query('id') id: string,
+    @Query('fileName') _fileName: string
+  ) {
     const cacheKey = `fileList_${id}`;
     const cacheData = await this.redisService.get(cacheKey);
     if (cacheData) {

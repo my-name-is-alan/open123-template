@@ -15,7 +15,7 @@ export default {
   mongoose: {
     dataSource: {
       default: {
-        uri: 'mongodb://192.168.0.19:27017/open123',
+        uri: 'mongodb://localhost:27017/open123',
         options: {
           useNewUrlParser: true,
           useUnifiedTopology: true,
@@ -31,9 +31,12 @@ export default {
   redis: {
     client: {
       port: 6379, // Redis port
-      host: '192.168.0.19', // Redis host
+      host: 'localhost', // Redis host
       db: 0,
-      password: 'foobared'
+      // password: 'foobared',
     },
+  },
+  cors: {
+    origin: '*',
   },
 } as MidwayConfig;

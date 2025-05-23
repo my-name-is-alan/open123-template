@@ -6,12 +6,15 @@ import { join } from 'path';
 import { ReportMiddleware } from './middleware/report.middleware';
 import * as typegoose from '@midwayjs/typegoose';
 import * as redis from '@midwayjs/redis';
+import * as crossDomain from '@midwayjs/cross-domain';
+
 @Configuration({
   imports: [
     koa,
     validate,
     typegoose,
     redis,
+    crossDomain,
     {
       component: info,
       enabledEnvironment: ['local'],
